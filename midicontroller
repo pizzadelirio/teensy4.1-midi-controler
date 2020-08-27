@@ -1,0 +1,50 @@
+
+//In a nutshell, you put things that repeat into an iteratable list. That way you can run a loop and say "do this except change it by one". Pins, notes, objects, etc.
+
+
+//Here's your code, rewritten with some arrays (and heap allocation): 
+
+
+#include <Bounce.h>
+int buttonPin = 41;
+int buttonRead;
+const int NumButtons = 40;
+
+const int channel = 1;
+const int DebounceMS = 5;
+
+Bounce* buttons[NumButtons];
+const int Notes[NumButtons] = { 51, 52, 53, 54, 55,56, 57, 58, 59, 60, 61, 62,63, 64,65, 66, 67, 68, 69, 70, 71, 31, 32, 33, 34,35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49,  }; 
+
+
+void setup() {
+pinMode(buttonPin, INPUT);
+  for(int i = 0; i < NumButtons; i++) {
+    buttons[i] = new Bounce(i, DebounceMS);
+    pinMode(i, INPUT_PULLUP);
+  }
+}
+
+void loop() {
+buttonRead=digitalRead(buttonPin);
+Serial.println(buttonRead);
+
+{
+
+for(int i = 0; i < NumButtons; i++) {
+
+    buttons[i]->update();
+    if(buttons[i]->fallingEdge()) {
+      usbMIDI.sendNoteOn(Notes[i], 99, channel);
+    }
+    else if(buttons[i]->risingEdge()) {
+      usbMIDI.sendNoteOff(Notes[i], 99, channel);
+    }
+
+  }
+
+
+
+  while (usbMIDI.read()) {}   // ignore incoming messages
+}
+}
