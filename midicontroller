@@ -1,8 +1,4 @@
 
-//In a nutshell, you put things that repeat into an iteratable list. That way you can run a loop and say "do this except change it by one". Pins, notes, objects, etc.
-
-
-//Here's your code, rewritten with some arrays (and heap allocation): 
 
 
 #include <Bounce.h>
